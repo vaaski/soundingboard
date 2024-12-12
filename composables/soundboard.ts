@@ -78,9 +78,11 @@ export class Soundboard {
 
 	public readonly sounds = SOUNDS
 	public static readonly sounds = SOUNDS
+
 	private initialized = false
 	private audioContext?: AudioContext
 	private audioElements = new Map<string, EdgeableAudio>()
+
 	public edge = false
 	public sharedModeEnabled = false
 
@@ -166,5 +168,22 @@ export class Soundboard {
 				this.audioElements.set(key, audio)
 			})
 		}
+	}
+}
+
+export const canPlay = async () => {
+	// eslint-disable-next-line unicorn/prefer-global-this
+	if (!window) return false
+
+	const audio = new Audio(`/sound/augh.mp3`)
+	audio.muted = true
+
+	try {
+		await audio.play()
+		audio.pause()
+
+		return true
+	} catch {
+		return false
 	}
 }

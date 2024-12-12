@@ -36,6 +36,9 @@ onMounted(() => {
 
 	globalThis.addEventListener("pointerdown", activate, { signal: activation.signal })
 	globalThis.addEventListener("keydown", activate, { signal: activation.signal })
+	canPlay().then((allowed) => {
+		if (allowed) activate()
+	})
 })
 
 onUnmounted(() => {
