@@ -24,3 +24,7 @@ jobs:
         run: |
           docker build . --tag ghcr.io/vaaski/soundingboard:latest
           docker push ghcr.io/vaaski/soundingboard:latest
+
+      - name: "Update instance"
+        run: |
+          curl ${{ secrets.PORTAINER_WEBHOOK_URL }}
