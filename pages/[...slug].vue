@@ -22,6 +22,7 @@ onMounted(() => {
 		edgingMode,
 		(value) => {
 			board.edge = value
+			socket.emit("setEdge", value)
 		},
 		{ immediate: true },
 	)
@@ -38,6 +39,10 @@ onMounted(() => {
 	globalThis.addEventListener("keydown", activate, { signal: activation.signal })
 	canPlay().then((allowed) => {
 		if (allowed) activate()
+	})
+
+	socket.on("setEdge", (value) => {
+		edgingMode.value = value
 	})
 })
 
