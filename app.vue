@@ -17,5 +17,6 @@ html,
 	justify-content: center;
 	font-family: "Roboto Mono Variable", monospace;
 	font-size: 0.85em;
+	color-scheme: dark light;
 }
 </style>
