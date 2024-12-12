@@ -44,6 +44,14 @@ onMounted(() => {
 	socket.on("setEdge", (value) => {
 		edgingMode.value = value
 	})
+
+	socket.on("disconnect", () => {
+		globalMode.value = false
+
+		socket.on("connect", () => {
+			location.reload()
+		})
+	})
 })
 
 onUnmounted(() => {
