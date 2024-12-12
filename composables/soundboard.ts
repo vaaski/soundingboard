@@ -128,7 +128,6 @@ export class Soundboard {
 		downEvent.preventDefault()
 		downEvent.stopPropagation()
 
-		console.log(downEvent.key, this.sharedModeEnabled)
 		let stop: () => void
 		if (this.sharedModeEnabled) {
 			this.socket.emit("playSound", downEvent.key)

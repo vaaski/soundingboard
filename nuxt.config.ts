@@ -4,6 +4,12 @@ export default defineNuxtConfig({
 	devtools: { enabled: true },
 	modules: ["@nuxt/eslint", "@vueuse/nuxt"],
 
+	app: {
+		head: {
+			title: "soundingboard",
+		},
+	},
+
 	vite: {
 		css: {
 			preprocessorOptions: {
