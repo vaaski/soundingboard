@@ -1,5 +1,17 @@
 /* cspell:disable */
 const SOUND_MAP = {
+	B: "drill.mp3",
+	C: "chirp.mp3",
+	D: "danger.mp3",
+	F: "fish.mp3",
+	G: "getout.mp3",
+	H: "laugh.mp3",
+	I: "screenshot.mp3",
+	L: "lobotomy.mp3",
+	M: "moan.mp3",
+	N: "21.mp3",
+	R: "riff.mp3",
+	S: "stroking.mp3",
 	"1": "lois.mp3",
 	"2": "tyrone.mp3",
 	"3": "slidewhistle.mp3",
@@ -107,7 +119,7 @@ export class Soundboard {
 		if (!this.active) return
 		if (downEvent.repeat) return
 
-		if (downEvent.altKey || downEvent.shiftKey) return
+		if (downEvent.altKey) return
 		if (downEvent.metaKey || downEvent.ctrlKey) return
 
 		const selectedAudio = this.audioElements.get(downEvent.key)
