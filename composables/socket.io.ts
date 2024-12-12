@@ -10,11 +10,11 @@ export const useSocket = () => {
 	}
 
 	socketUsers++
-	console.log({ socketUsers })
+	console.log("mount", { socketUsers })
 
 	onUnmounted(() => {
 		socketUsers--
-		console.log({ socketUsers })
+		console.log("unmount", { socketUsers })
 		if (socketUsers === 0) {
 			socket?.disconnect()
 			socket = undefined

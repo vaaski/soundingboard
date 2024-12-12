@@ -2,10 +2,9 @@
 const sounds = Soundboard.sounds
 const activated = ref(false)
 
-const socket = useSocket()
-
 let board: Soundboard
 onMounted(() => {
+	const socket = useSocket()
 	board = new Soundboard(socket)
 	const activation = new AbortController()
 
@@ -31,15 +30,39 @@ onUnmounted(() => {
 		<div v-if="!activated" class="activation-overlay">
 			<span>click to activate</span>
 		</div>
-		<ul v-show="activated" id="button-list">
-			<li v-for="[key, name] in sounds" :key="name">
-				{{ `${key} - ${name.replace(".mp3", "")}` }}
-			</li>
-		</ul>
+
+		<div v-show="activated" class="board">
+			<div class="controls">
+				<div class="control">
+					<input id="global" type="checkbox" name="global" checked />
+					<label for="global">global mode</label>
+				</div>
+
+				<div class="control">
+					<input id="edging" type="checkbox" name="edging" />
+					<label for="edging">edging mode</label>
+				</div>
+			</div>
+			<ul id="button-list">
+				<li v-for="[key, name] in sounds" :key="name">
+					<span class="key">{{ key }}</span>
+					<span class="name">{{ name.replace(".mp3", "") }}</span>
+				</li>
+			</ul>
+		</div>
 	</main>
 </template>
 
 <style scoped lang="scss">
+main {
+	width: 90%;
+	max-width: 1000px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1em;
+}
+
 .activation-overlay {
 	position: absolute;
 	top: 0;
@@ -60,19 +83,54 @@ onUnmounted(() => {
 
 label,
 ul {
-	font-family: monospace;
 	user-select: none;
+	-webkit-user-select: none;
+}
+
+.controls {
+	display: flex;
+	justify-content: center;
+	gap: 1em;
+
+	.control {
+		display: flex;
+		align-items: center;
+	}
+}
+
+.board {
+	width: 90%;
+	max-width: 1000px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1em;
 }
 
 ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
-}
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+	max-width: 100%;
 
-ul > li {
-	font-size: 1.25em;
-	margin: 0.5em 0;
-	-webkit-user-select: none;
+	li {
+		font-size: 1.25em;
+		margin: 0.5em 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		span.key {
+			font-size: 2em;
+			font-weight: 600;
+		}
+
+		span.name {
+			opacity: 0.5;
+			font-size: 0.9em;
+		}
+	}
 }
 </style>
