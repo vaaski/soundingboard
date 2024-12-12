@@ -1,0 +1,6 @@
+name: soundingboard
+services:
+  soundingboard:
+    image: ghcr.io/vaaski/soundingboard:latest
+    ports:
+      - 3000:3000
