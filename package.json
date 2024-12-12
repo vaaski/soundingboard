@@ -17,7 +17,6 @@
 		"@vueuse/core": "^12.0.0",
 		"@vueuse/nuxt": "^12.0.0",
 		"nuxt": "^3.14.1592",
-		"sass-embedded": "^1.82.0",
 		"socket.io": "^4.8.1",
 		"socket.io-client": "^4.8.1",
 		"vue": "latest",
@@ -25,7 +24,10 @@
 	},
 	"devDependencies": {
 		"@nuxt/eslint": "^0.7.3",
+		"engine.io": "^6.6.2",
 		"eslint-plugin-unicorn": "^56.0.1",
-		"prettier": "^3.4.2"
+		"prettier": "^3.4.2",
+		"sass-embedded": "^1.82.0",
+		"typescript": "^5.7.2"
 	}
 }

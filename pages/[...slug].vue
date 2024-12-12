@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import type { SocketClient } from "~/types/socket.io"
-
 const sounds = Soundboard.sounds
 const activated = ref(false)
 const globalMode = ref(true)
 const edgingMode = ref(false)
 
 let board: Soundboard
-let socket: SocketClient
+let socket: ReturnType<typeof useSocket>
 onMounted(() => {
 	socket = useSocket()
 	board = new Soundboard(socket)
@@ -56,7 +54,7 @@ onMounted(() => {
 	})
 })
 
-const setEdgeUI = (event: InputEvent) => {
+const setEdgeUI = (event: Event) => {
 	const target = event.target
 	if (target instanceof HTMLInputElement === false) throw new Error("not a checkbox")
 
