@@ -47,6 +47,10 @@ const model = defineModel<boolean>()
 	&[data-state="checked"] {
 		background-color: hsl(0, 0%, 50%);
 	}
+
+	&:focus {
+		box-shadow: 0 0 0 1px currentColor;
+	}
 }
 
 :deep(.switch-thumb) {
