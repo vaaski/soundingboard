@@ -2,8 +2,11 @@
 const sounds = Soundboard.sounds
 const activated = ref(false)
 
+const socket = useSocket()
+
+let board: Soundboard
 onMounted(() => {
-	const board = new Soundboard()
+	board = new Soundboard(socket)
 	const activation = new AbortController()
 
 	const activate = async () => {
@@ -16,6 +19,10 @@ onMounted(() => {
 
 	globalThis.addEventListener("pointerdown", activate, { signal: activation.signal })
 	globalThis.addEventListener("keydown", activate, { signal: activation.signal })
+})
+
+onUnmounted(() => {
+	board.deactivate()
 })
 </script>
 

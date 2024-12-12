@@ -1,3 +1,5 @@
+import type { SocketClient } from "~/types/socket.io"
+
 /* cspell:disable */
 const SOUND_MAP = {
 	B: "drill.mp3",
@@ -56,12 +58,13 @@ const SOUNDS = new Map(Object.entries(SOUND_MAP))
 
 let singleInstanceLock = false
 export class Soundboard {
-	// private socket: FrontFuckSocket
-	constructor() {
+	constructor(private socket: SocketClient) {
 		if (singleInstanceLock) throw new Error("soundboard already initialized")
 
 		singleInstanceLock = true
-		globalThis.addEventListener("keydown", this.onKeydown)
+		globalThis.addEventListener("keydown", this.onKeydown, {
+			signal: this.keydownAbort.signal,
+		})
 
 		// socket.on("playSound", (key) => {
 		//   if (!this.#sharedModeEnabled) return
@@ -77,6 +80,14 @@ export class Soundboard {
 	private audioContext?: AudioContext
 	private audioElements = new Map<string, EdgeableAudio>()
 	public edge = false
+
+	private keydownAbort = new AbortController()
+
+	public deactivate = () => {
+		this.keydownAbort.abort()
+		singleInstanceLock = false
+		this.#active = false
+	}
 
 	#active = false
 	public get active() {
@@ -112,7 +123,6 @@ export class Soundboard {
 
 	private setSharedMode = (enabled: boolean) => {
 		console.log("setSharedMode", enabled)
-		// this.socket.emit("setSharedSoundboard", enabled)
 	}
 
 	private onKeydown = (downEvent: KeyboardEvent) => {
@@ -130,7 +140,7 @@ export class Soundboard {
 
 		let stop: () => void
 		if (this.#sharedModeEnabled) {
-			// this.socket.emit("playSound", downEvent.key)
+			this.socket.emit("playSound", downEvent.key)
 		} else {
 			stop = this.playSound(downEvent.key)
 		}
