@@ -12,13 +12,13 @@ export default defineNitroPlugin((nitroApp) => {
 	io.bind(engine)
 
 	socketHandler(io)
-	io.on("connection", (socket) => {
-		console.log(`socket connected    ${socket.id}`)
+	// io.on("connection", (socket) => {
+	// 	console.log(`socket connected    ${socket.id}`)
 
-		socket.on("disconnect", () => {
-			console.log(`socket disconnected ${socket.id}`)
-		})
-	})
+	// 	socket.on("disconnect", () => {
+	// 		console.log(`socket disconnected ${socket.id}`)
+	// 	})
+	// })
 
 	nitroApp.router.use(
 		"/socket.io/",

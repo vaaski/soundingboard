@@ -70,14 +70,22 @@ export class Soundboard {
 			if (!this.sharedModeEnabled) return
 
 			const stop = this.playSound(key)
-			socket.once("stopSound", (stopKey) => {
-				if (stopKey === key) stop()
-			})
+			this.playingSounds.set(key, stop)
+		})
+
+		socket.on("stopSound", (stopKey) => {
+			const handler = this.playingSounds.get(stopKey)
+			if (handler) {
+				this.playingSounds.delete(stopKey)
+				handler()
+			}
 		})
 	}
 
 	public readonly sounds = SOUNDS
 	public static readonly sounds = SOUNDS
+
+	private playingSounds = new Map<string, () => void>()
 
 	private initialized = false
 	private audioContext?: AudioContext
