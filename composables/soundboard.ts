@@ -66,12 +66,12 @@ export class Soundboard {
 			signal: this.keydownAbort.signal,
 		})
 
-		// socket.on("playSound", (key) => {
-		//   if (!this.#sharedModeEnabled) return
+		socket.on("playSound", (key) => {
+			if (!this.sharedModeEnabled) return
 
-		//   const stop = this.playSound(key)
-		//   socket.once("stopSound", stop)
-		// })
+			const stop = this.playSound(key)
+			// socket.once("stopSound", stop)
+		})
 	}
 
 	public readonly sounds = SOUNDS
@@ -80,6 +80,7 @@ export class Soundboard {
 	private audioContext?: AudioContext
 	private audioElements = new Map<string, EdgeableAudio>()
 	public edge = false
+	public sharedModeEnabled = false
 
 	private keydownAbort = new AbortController()
 
@@ -112,19 +113,6 @@ export class Soundboard {
 		}
 	}
 
-	#sharedModeEnabled = false
-	get sharedModeEnabled() {
-		return this.#sharedModeEnabled
-	}
-	set sharedModeEnabled(value) {
-		this.setSharedMode(value)
-		this.#sharedModeEnabled = value
-	}
-
-	private setSharedMode = (enabled: boolean) => {
-		console.log("setSharedMode", enabled)
-	}
-
 	private onKeydown = (downEvent: KeyboardEvent) => {
 		if (!this.active) return
 		if (downEvent.repeat) return
@@ -138,8 +126,9 @@ export class Soundboard {
 		downEvent.preventDefault()
 		downEvent.stopPropagation()
 
+		console.log(downEvent.key, this.sharedModeEnabled)
 		let stop: () => void
-		if (this.#sharedModeEnabled) {
+		if (this.sharedModeEnabled) {
 			this.socket.emit("playSound", downEvent.key)
 		} else {
 			stop = this.playSound(downEvent.key)
@@ -149,7 +138,7 @@ export class Soundboard {
 			if (upEvent.key !== downEvent.key) return
 			globalThis.removeEventListener("keyup", onKeyup)
 
-			if (this.#sharedModeEnabled) {
+			if (this.sharedModeEnabled) {
 				// this.socket.emit("stopSound")
 			} else {
 				stop()

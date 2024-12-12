@@ -1,12 +1,30 @@
 <script setup lang="ts">
 const sounds = Soundboard.sounds
 const activated = ref(false)
+const globalMode = ref(true)
+const edgingMode = ref(false)
 
 let board: Soundboard
 onMounted(() => {
 	const socket = useSocket()
 	board = new Soundboard(socket)
 	const activation = new AbortController()
+
+	watch(
+		globalMode,
+		(value) => {
+			board.sharedModeEnabled = value
+		},
+		{ immediate: true },
+	)
+
+	watch(
+		edgingMode,
+		(value) => {
+			board.edge = value
+		},
+		{ immediate: true },
+	)
 
 	const activate = async () => {
 		activation.abort()
@@ -34,12 +52,12 @@ onUnmounted(() => {
 		<div v-show="activated" class="board">
 			<div class="controls">
 				<div class="control">
-					<input id="global" type="checkbox" name="global" checked />
+					<input id="global" v-model="globalMode" type="checkbox" name="global" checked />
 					<label for="global">global mode</label>
 				</div>
 
 				<div class="control">
-					<input id="edging" type="checkbox" name="edging" />
+					<input id="edging" v-model="edgingMode" type="checkbox" name="edging" />
 					<label for="edging">edging mode</label>
 				</div>
 			</div>
