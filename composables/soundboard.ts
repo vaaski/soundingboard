@@ -70,7 +70,9 @@ export class Soundboard {
 			if (!this.sharedModeEnabled) return
 
 			const stop = this.playSound(key)
-			// socket.once("stopSound", stop)
+			socket.once("stopSound", (stopKey) => {
+				if (stopKey === key) stop()
+			})
 		})
 	}
 
@@ -139,7 +141,7 @@ export class Soundboard {
 			globalThis.removeEventListener("keyup", onKeyup)
 
 			if (this.sharedModeEnabled) {
-				// this.socket.emit("stopSound")
+				this.socket.emit("stopSound", downEvent.key)
 			} else {
 				stop()
 			}

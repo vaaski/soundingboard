@@ -5,5 +5,9 @@ export const socketHandler = (io: SocketServer) => {
 		socket.on("playSound", (key) => {
 			io.emit("playSound", key)
 		})
+
+		socket.on("stopSound", (key) => {
+			io.emit("stopSound", key)
+		})
 	})
 }
