@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import type { SocketClient } from "~/types/socket.io"
+
 const sounds = Soundboard.sounds
 const activated = ref(false)
 const globalMode = ref(true)
 const edgingMode = ref(false)
 
 let board: Soundboard
+let socket: SocketClient
 onMounted(() => {
-	const socket = useSocket()
+	socket = useSocket()
 	board = new Soundboard(socket)
 	const activation = new AbortController()
 
@@ -22,7 +25,6 @@ onMounted(() => {
 		edgingMode,
 		(value) => {
 			board.edge = value
-			socket.emit("setEdge", value)
 		},
 		{ immediate: true },
 	)
@@ -54,6 +56,14 @@ onMounted(() => {
 	})
 })
 
+const setEdgeUI = (event: InputEvent) => {
+	const target = event.target
+	if (target instanceof HTMLInputElement === false) throw new Error("not a checkbox")
+
+	socket.emit("setEdge", target.checked)
+	edgingMode.value = target.checked
+}
+
 onUnmounted(() => {
 	board.deactivate()
 })
@@ -73,7 +83,13 @@ onUnmounted(() => {
 				</div>
 
 				<div class="control">
-					<input id="edging" v-model="edgingMode" type="checkbox" name="edging" />
+					<input
+						id="edging"
+						v-model="edgingMode"
+						type="checkbox"
+						name="edging"
+						@change="setEdgeUI"
+					/>
 					<label for="edging">edging mode</label>
 				</div>
 			</div>
