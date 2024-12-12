@@ -29,7 +29,7 @@ const model = defineModel<boolean>()
 }
 
 :deep(.switch-root) {
-	--switch-width: 2rem;
+	--switch-width: 2.25rem;
 	--switch-height: 1.25rem;
 	--thumb-margin: 2px;
 
@@ -42,7 +42,9 @@ const model = defineModel<boolean>()
 	position: relative;
 	-webkit-tap-highlight-color: transparent;
 
-	transition: background-color 100ms;
+	transition:
+		background-color 100ms,
+		box-shadow 100ms;
 
 	&[data-state="checked"] {
 		background-color: hsl(0, 0%, 50%);
