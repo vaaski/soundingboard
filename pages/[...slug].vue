@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const sounds = Soundboard.sounds
-const activated = ref(false)
+const activated = ref(true)
 const globalMode = ref(true)
 const edgingMode = ref(false)
 
@@ -38,6 +38,7 @@ onMounted(() => {
 	globalThis.addEventListener("pointerdown", activate, { signal: activation.signal })
 	globalThis.addEventListener("keydown", activate, { signal: activation.signal })
 	canPlay().then((allowed) => {
+		activated.value = false
 		if (allowed) activate()
 	})
 
