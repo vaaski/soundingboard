@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import "@fontsource-variable/roboto-mono"
+</script>
+
 <template>
 	<NuxtPage />
 </template>
