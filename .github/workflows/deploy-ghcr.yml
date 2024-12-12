@@ -27,4 +27,4 @@ jobs:
 
       - name: "Update instance"
         run: |
-          curl ${{ secrets.PORTAINER_WEBHOOK_URL }}
+          curl -X POST ${{ secrets.PORTAINER_WEBHOOK_URL }}
