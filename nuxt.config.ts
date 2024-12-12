@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
 	compatibilityDate: "2024-11-01",
 	devtools: { enabled: true },
-	modules: ["@nuxt/eslint", "@vueuse/nuxt"],
+	modules: ["@nuxt/eslint", "@vueuse/nuxt", "radix-vue/nuxt"],
 
 	app: {
 		head: {

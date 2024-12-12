@@ -55,12 +55,9 @@ onMounted(() => {
 	})
 })
 
-const setEdgeUI = (event: Event) => {
-	const target = event.target
-	if (target instanceof HTMLInputElement === false) throw new Error("not a checkbox")
-
-	socket.emit("setEdge", target.checked)
-	edgingMode.value = target.checked
+const setEdgeUI = (value: boolean) => {
+	socket.emit("setEdge", value)
+	edgingMode.value = value
 }
 
 onUnmounted(() => {
@@ -77,17 +74,15 @@ onUnmounted(() => {
 		<div v-show="activated" class="board">
 			<div class="controls">
 				<div class="control">
-					<input id="global" v-model="globalMode" type="checkbox" name="global" checked />
+					<RadixSwitch v-model="globalMode" label-id="global" />
 					<label for="global">global mode</label>
 				</div>
 
 				<div class="control">
-					<input
-						id="edging"
+					<RadixSwitch
 						v-model="edgingMode"
-						type="checkbox"
-						name="edging"
-						@change="setEdgeUI"
+						label-id="edging"
+						@update:model-value="setEdgeUI"
 					/>
 					<label for="edging">edging mode</label>
 				</div>
@@ -138,11 +133,13 @@ ul {
 .controls {
 	display: flex;
 	justify-content: center;
-	gap: 1em;
+	gap: 2em;
 
 	.control {
 		display: flex;
 		align-items: center;
+		gap: 0.5em;
+		line-height: 1;
 	}
 }
 
