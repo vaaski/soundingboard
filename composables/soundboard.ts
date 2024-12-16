@@ -38,6 +38,7 @@ const SOUND_MAP = {
 	N: "21.mp3",
 	n: "samsung.mp3",
 	o: "huh.mp3",
+	O: "league.mp3",
 	ö: "wth.mp3",
 	p: "bass.mp3",
 	q: "squid.mp3",
