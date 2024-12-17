@@ -51,6 +51,7 @@ const SOUND_MAP = {
 	ü: "womp.mp3",
 	v: "vineboom.mp3",
 	w: "wetfart.mp3",
+	W: "what.mp3",
 	x: "taco.mp3",
 	y: "crying.mp3",
 	z: "buzzer.mp3",
