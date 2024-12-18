@@ -159,6 +159,7 @@ ul {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 	max-width: 100%;
+	width: 100%;
 
 	li {
 		font-size: 1.25em;
