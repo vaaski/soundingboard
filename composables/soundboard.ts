@@ -54,6 +54,7 @@ const SOUND_MAP = {
 	W: "what.mp3",
 	x: "taco.mp3",
 	y: "crying.mp3",
+	Y: "correct.mp3",
 	z: "buzzer.mp3",
 }
 /* cspell:enable */
