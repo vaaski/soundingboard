@@ -104,7 +104,9 @@ main {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 1em;
+	gap: 1rem;
+	margin: auto;
+	padding: 2rem 0;
 }
 
 .activation-overlay {
