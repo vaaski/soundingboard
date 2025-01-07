@@ -19,4 +19,8 @@ html,
 	font-size: 0.85em;
 	color-scheme: dark light;
 }
+
+* {
+	user-select: none;
+}
 </style>
