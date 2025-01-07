@@ -79,7 +79,7 @@ export class Soundboard {
 		socket.on("playSound", (key) => {
 			if (!this.sharedModeEnabled) return
 
-			const stop = this.playSound(key)
+			const stop = this.playActualSound(key)
 			this.playingSounds.set(key, stop)
 		})
 
@@ -125,6 +125,25 @@ export class Soundboard {
 	}
 
 	public playSound = (key: string) => {
+		let stop: () => void
+		if (this.sharedModeEnabled) {
+			this.socket.emit("playSound", key)
+		} else {
+			stop = this.playActualSound(key)
+		}
+
+		const onKeyup = (): void => {
+			if (this.sharedModeEnabled) {
+				this.socket.emit("stopSound", key)
+			} else {
+				stop()
+			}
+		}
+
+		return onKeyup
+	}
+
+	private playActualSound = (key: string) => {
 		const selectedAudio = this.audioElements.get(key)
 		if (!selectedAudio) throw new Error(`remote sound ${key} not found`)
 
@@ -156,27 +175,18 @@ export class Soundboard {
 		downEvent.preventDefault()
 		downEvent.stopPropagation()
 
-		let stop: () => void
-		if (this.sharedModeEnabled) {
-			this.socket.emit("playSound", downEvent.key)
-		} else {
-			stop = this.playSound(downEvent.key)
-		}
+		const stop = this.playSound(downEvent.key)
 
 		const onKeyup = (upEvent: KeyboardEvent): void => {
 			if (upEvent.key !== downEvent.key) return
 			globalThis.removeEventListener("keyup", onKeyup)
 
-			if (this.sharedModeEnabled) {
-				this.socket.emit("stopSound", downEvent.key)
-			} else {
-				stop()
-			}
+			stop()
 		}
 		globalThis.addEventListener("keyup", onKeyup)
 	}
 
-	loadSound = async (path: string, audioContext: AudioContext) => {
+	private loadSound = async (path: string, audioContext: AudioContext) => {
 		const audio = await fetch(`/sound/${path}`)
 		const arrayBuffer = await audio.arrayBuffer()
 		const edgeableAudio = new EdgeableAudio(audioContext)

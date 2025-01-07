@@ -78,6 +78,11 @@ watch(playbackRateThrottled, (value) => {
 	socket.emit("setPlaybackRate", value)
 })
 
+const onSoundDown = (key: string, event: PointerEvent) => {
+	const stop = board.playSound(key)
+	event.target?.addEventListener("pointerup", stop, { once: true })
+}
+
 onUnmounted(() => {
 	board.deactivate()
 })
@@ -109,7 +114,11 @@ onUnmounted(() => {
 				</div>
 			</div>
 			<ul id="button-list">
-				<li v-for="[key, name] in sounds" :key="name">
+				<li
+					v-for="[key, name] in sounds"
+					:key="name"
+					@pointerdown.prevent="onSoundDown(key, $event)"
+				>
 					<span class="key">{{ key }}</span>
 					<span class="name">{{ name.replace(".mp3", "") }}</span>
 				</li>
