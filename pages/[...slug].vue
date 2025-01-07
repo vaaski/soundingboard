@@ -28,6 +28,14 @@ onMounted(() => {
 		{ immediate: true },
 	)
 
+	watch(
+		playbackRate,
+		(value) => {
+			board.playbackRate = value
+		},
+		{ immediate: true },
+	)
+
 	const activate = async () => {
 		activation.abort()
 		console.log("activate")
@@ -47,6 +55,10 @@ onMounted(() => {
 		edgingMode.value = value
 	})
 
+	socket.on("setPlaybackRate", (value) => {
+		playbackRate.value = value
+	})
+
 	socket.on("disconnect", () => {
 		globalMode.value = false
 
@@ -61,8 +73,9 @@ const setEdgeUI = (value: boolean) => {
 	edgingMode.value = value
 }
 
-watch(playbackRate, (value) => {
-	board.playbackRate = value
+const playbackRateThrottled = refThrottled(playbackRate, 100)
+watch(playbackRateThrottled, (value) => {
+	socket.emit("setPlaybackRate", value)
 })
 
 onUnmounted(() => {
