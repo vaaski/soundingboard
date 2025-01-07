@@ -3,6 +3,7 @@ const sounds = Soundboard.sounds
 const activated = ref(true)
 const globalMode = ref(true)
 const edgingMode = ref(false)
+const playbackRate = ref(1)
 
 let board: Soundboard
 let socket: ReturnType<typeof useSocket>
@@ -60,6 +61,10 @@ const setEdgeUI = (value: boolean) => {
 	edgingMode.value = value
 }
 
+watch(playbackRate, (value) => {
+	board.playbackRate = value
+})
+
 onUnmounted(() => {
 	board.deactivate()
 })
@@ -72,6 +77,9 @@ onUnmounted(() => {
 		</div>
 
 		<div v-show="activated" class="board">
+			<div class="controls slider">
+				<RadixSlider v-model="playbackRate" />
+			</div>
 			<div class="controls">
 				<div class="control">
 					<RadixSwitch v-model="globalMode" label-id="global" />
@@ -136,6 +144,10 @@ ul {
 	display: flex;
 	justify-content: center;
 	gap: 2em;
+
+	&.slider {
+		width: min(100%, 700px);
+	}
 
 	.control {
 		display: flex;

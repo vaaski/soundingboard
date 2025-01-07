@@ -5,7 +5,7 @@ export class EdgeableAudio {
 	#reversed?: AudioBuffer
 	#durationMS = 0
 	#startTime = 0
-	#currentSourceNode?: AudioBufferSourceNode
+	currentSourceNode?: AudioBufferSourceNode
 
 	public load = async (audioArrayBuffer: ArrayBuffer) => {
 		this.#decoded = await this.context.decodeAudioData(audioArrayBuffer)
@@ -25,23 +25,25 @@ export class EdgeableAudio {
 	public reverse = () => {
 		if (!this.#reversed) throw new Error("Audio not loaded, call .load() first")
 
+		const rate = this.currentSourceNode?.playbackRate.value ?? 1
 		const stopTime = performance.now()
-		const playDuration = Math.min(stopTime - this.#startTime, this.#durationMS)
+		const endPoint = stopTime - this.#startTime
+		const playDuration = Math.min(endPoint * rate, this.#durationMS)
 		const newStartPoint = (this.#durationMS - playDuration) / 1e3
 
-		this.#currentSourceNode?.stop()
+		this.currentSourceNode?.stop()
 		this.#playBuffer(this.#reversed, newStartPoint)
 	}
 
 	public stop = () => {
-		this.#currentSourceNode?.stop()
+		this.currentSourceNode?.stop()
 	}
 
 	#playBuffer = (buffer: AudioBuffer, time = 0) => {
-		this.#currentSourceNode = this.context.createBufferSource()
-		this.#currentSourceNode.buffer = buffer
-		this.#currentSourceNode.connect(this.context.destination)
-		this.#currentSourceNode.start(0, time)
+		this.currentSourceNode = this.context.createBufferSource()
+		this.currentSourceNode.buffer = buffer
+		this.currentSourceNode.connect(this.context.destination)
+		this.currentSourceNode.start(0, time)
 	}
 
 	#cloneAudioBuffer = (audioBuffer: AudioBuffer) => {

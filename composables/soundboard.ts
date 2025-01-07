@@ -103,6 +103,7 @@ export class Soundboard {
 
 	public edge = false
 	public sharedModeEnabled = false
+	public playbackRate = 1
 
 	private keydownAbort = new AbortController()
 
@@ -128,10 +129,17 @@ export class Soundboard {
 		if (!selectedAudio) throw new Error(`remote sound ${key} not found`)
 
 		selectedAudio.play()
+		if (selectedAudio.currentSourceNode) {
+			selectedAudio.currentSourceNode.playbackRate.value = this.playbackRate
+		}
 
 		return () => {
-			if (this.edge) selectedAudio.reverse()
-			else selectedAudio.stop()
+			if (this.edge) {
+				selectedAudio.reverse()
+				if (selectedAudio.currentSourceNode) {
+					selectedAudio.currentSourceNode.playbackRate.value = this.playbackRate
+				}
+			} else selectedAudio.stop()
 		}
 	}
 
