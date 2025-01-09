@@ -13,6 +13,8 @@ type ClientToServerEvents = {
 	stopSound: (key: string) => void
 	setEdge: (value: boolean) => void
 	setPlaybackRate: (value: number) => void
+
+	getUpdate: (callback: (state: { edge: boolean; playbackRate: number }) => void) => void
 }
 
 export type SocketServer = Server<ClientToServerEvents, ServerToClientEvents>

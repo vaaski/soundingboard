@@ -16,6 +16,13 @@ onMounted(() => {
 		globalMode,
 		(value) => {
 			board.sharedModeEnabled = value
+
+			if (value) {
+				socket.emit("getUpdate", (state) => {
+					edgingMode.value = state.edge
+					playbackRate.value = state.playbackRate
+				})
+			}
 		},
 		{ immediate: true },
 	)

@@ -25,5 +25,9 @@ export const socketHandler = (io: SocketServer) => {
 			playbackRate = value
 			io.emit("setPlaybackRate", value)
 		})
+
+		socket.on("getUpdate", (callback) => {
+			callback({ edge, playbackRate })
+		})
 	})
 }
