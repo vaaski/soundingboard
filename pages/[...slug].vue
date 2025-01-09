@@ -52,11 +52,11 @@ onMounted(() => {
 	})
 
 	socket.on("setEdge", (value) => {
-		edgingMode.value = value
+		if (globalMode.value) edgingMode.value = value
 	})
 
 	socket.on("setPlaybackRate", (value) => {
-		playbackRate.value = value
+		if (globalMode.value) playbackRate.value = value
 	})
 
 	socket.on("disconnect", () => {
@@ -69,13 +69,13 @@ onMounted(() => {
 })
 
 const setEdgeUI = (value: boolean) => {
-	socket.emit("setEdge", value)
+	if (globalMode.value) socket.emit("setEdge", value)
 	edgingMode.value = value
 }
 
 const playbackRateThrottled = refThrottled(playbackRate, 100)
 watch(playbackRateThrottled, (value) => {
-	socket.emit("setPlaybackRate", value)
+	if (globalMode.value) socket.emit("setPlaybackRate", value)
 })
 
 const onSoundDown = (key: string, event: PointerEvent) => {
