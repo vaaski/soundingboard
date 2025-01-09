@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { SliderRoot } from "radix-vue"
 import { ref } from "vue"
 
 const props = defineProps<{
@@ -22,15 +23,42 @@ watch(sliderValue, () => {
 const reset = () => {
 	sliderValue.value = [1]
 }
+
+const sliderRoot = ref()
+let lastClick = 0
+const pointerdownAbort = new AbortController()
+onMounted(() => {
+	if (sliderRoot.value?.$el instanceof HTMLElement === false) {
+		throw new TypeError("slider root element not found")
+	}
+
+	sliderRoot.value.$el.addEventListener(
+		"pointerdown",
+		(event: PointerEvent) => {
+			if (event.timeStamp - lastClick < 250) {
+				reset()
+			}
+
+			lastClick = event.timeStamp
+		},
+		{
+			signal: pointerdownAbort.signal,
+		},
+	)
+})
+
+onUnmounted(() => {
+	pointerdownAbort.abort()
+})
 </script>
 
 <template>
 	<SliderRoot
+		ref="sliderRoot"
 		v-model="sliderValue"
 		class="slider-root"
 		:max="2"
 		:step="0.01"
-		@dblclick="reset"
 	>
 		<SliderTrack class="slider-track">
 			<!-- <SliderRange class="slider-range" /> -->
@@ -40,6 +68,11 @@ const reset = () => {
 </template>
 
 <style lang="scss">
+.wrapper {
+	width: 100%;
+	height: 100%;
+}
+
 .slider-root {
 	position: relative;
 	display: flex;
@@ -69,8 +102,9 @@ const reset = () => {
 	display: block;
 	width: 4px;
 	height: 12px;
-	background-color: hsl(0, 0%, 100%);
+	background-color: hsl(0, 0%, 50%);
 	border-radius: 10px;
+	transition: 100ms;
 
 	// &:hover {
 	// 	background-color: hsl(0, 0%, 75%);
@@ -80,6 +114,10 @@ const reset = () => {
 		outline: none;
 		background-color: hsl(0, 0%, 100%);
 		box-shadow: 0 0 0 2px hsl(0, 0%, 50%);
+	}
+
+	&:active {
+		transition: 0ms;
 	}
 }
 </style>
