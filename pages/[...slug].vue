@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const sounds = Soundboard.sounds
 const activated = ref(true)
-const globalMode = ref(true)
-const edgingMode = ref(false)
+const globalMode = ref(process.env.NODE_ENV !== "development")
+const edgingMode = ref(true)
 const playbackRate = ref(1)
 
 let board: Soundboard
