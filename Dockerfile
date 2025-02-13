@@ -1,8 +1,7 @@
 FROM node:22-slim AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
 WORKDIR /home/app/
+RUN npm install -g corepack@latest
+RUN corepack enable && corepack prepare pnpm@10 --activate
 
 FROM base AS install
 RUN mkdir -p /temp/dep/
