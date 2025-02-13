@@ -48,7 +48,7 @@ const SOUND_MAP = {
 	q: "squid.mp3",
 	Q: "flashbang.mp3",
 	r: "brain.mp3",
-	R: "riff.mp3",
+	R: "rifflong.mp3",
 	S: "stroking.mp3",
 	s: "sus.mp3",
 	t: "running.mp3",
