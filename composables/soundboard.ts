@@ -178,7 +178,7 @@ export class Soundboard {
 		const stop = this.playSound(downEvent.key)
 
 		const onKeyup = (upEvent: KeyboardEvent): void => {
-			if (upEvent.key !== downEvent.key) return
+			if (upEvent.code !== downEvent.code) return
 			globalThis.removeEventListener("keyup", onKeyup)
 
 			stop()
