@@ -6,6 +6,7 @@ type ServerToClientEvents = {
 	stopSound: (key: string) => void
 	setEdge: (value: boolean) => void
 	setPlaybackRate: (value: number) => void
+	onlineUsers: (count: number) => void
 }
 
 type ClientToServerEvents = {

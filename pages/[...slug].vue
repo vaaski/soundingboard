@@ -4,6 +4,7 @@ const activated = ref(true)
 const globalMode = ref(process.env.NODE_ENV !== "development")
 const edgingMode = ref(true)
 const playbackRate = ref(1)
+const onlineUsers = ref(0)
 
 let board: Soundboard
 let socket: ReturnType<typeof useSocket>
@@ -66,6 +67,10 @@ onMounted(() => {
 		if (globalMode.value) playbackRate.value = value
 	})
 
+	socket.on("onlineUsers", (count) => {
+		onlineUsers.value = count
+	})
+
 	socket.on("disconnect", () => {
 		globalMode.value = false
 
@@ -75,7 +80,7 @@ onMounted(() => {
 	})
 })
 
-const setEdgeUI = (value: boolean) => {
+const setEdgeUI = (value = false) => {
 	if (globalMode.value) socket.emit("setEdge", value)
 	edgingMode.value = value
 }
@@ -102,6 +107,10 @@ onUnmounted(() => {
 		</div>
 
 		<div v-show="activated" class="board">
+			<div class="online-list">
+				<span>online users: {{ onlineUsers }}</span>
+			</div>
+
 			<div class="controls slider">
 				<RadixSlider v-model="playbackRate" />
 			</div>
@@ -184,6 +193,15 @@ ul {
 		gap: 0.5em;
 		line-height: 1;
 	}
+}
+
+.online-list {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 0.5em;
+	opacity: 0.25;
+	font-size: 1.2em;
 }
 
 .board {

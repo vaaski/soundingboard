@@ -4,6 +4,8 @@ let edge = false
 let playbackRate = 1
 
 export const socketHandler = (io: SocketServer) => {
+	const emitCount = () => io.emit("onlineUsers", io.sockets.sockets.size)
+
 	io.on("connection", (socket) => {
 		socket.emit("setEdge", edge)
 		socket.emit("setPlaybackRate", playbackRate)
@@ -29,5 +31,8 @@ export const socketHandler = (io: SocketServer) => {
 		socket.on("getUpdate", (callback) => {
 			callback({ edge, playbackRate })
 		})
+
+		emitCount()
+		socket.on("disconnect", emitCount)
 	})
 }
