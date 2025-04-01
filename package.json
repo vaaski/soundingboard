@@ -17,7 +17,7 @@
 		"@fontsource-variable/roboto-mono": "^5.1.0",
 		"@vueuse/core": "^12.0.0",
 		"@vueuse/nuxt": "^12.0.0",
-		"nuxt": "^3.14.1592",
+		"nuxt": "^3.16.0",
 		"radix-vue": "^1.9.11",
 		"socket.io": "^4.8.1",
 		"socket.io-client": "^4.8.1",
