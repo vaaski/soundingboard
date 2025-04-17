@@ -52,6 +52,7 @@ const SOUND_MAP = {
 	S: "stroking.mp3",
 	s: "sus.mp3",
 	t: "running.mp3",
+	T: "saus.mp3",
 	U: "skeleton.mp3",
 	u: "uy.mp3",
 	ü: "womp.mp3",
